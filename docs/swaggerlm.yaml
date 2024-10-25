@@ -38,11 +38,11 @@ externalDocs:
   url: https://legalmente.ai/
 servers:
 - url: https://safeagreement.azurewebsites.net/
-  description: Production Server Base URL for Simple Agreement for Future Equity (SAFE) review automation
+  description: Base URL for Simple Agreement for Future Equity (SAFE) review automation
 - url: https://baa-contract-v2.azurewebsites.net/
-  description: Production Server Base URL for Business Associate Agreement (BAA) review automation
+  description: Base URL for Business Associate Agreement (BAA) review automation
 - url: https://ndacontract.azurewebsites.net/
-  description: Production Server Base URL for Non-Disclosure Agreement (NDA) review automation
+  description: Base URL for Non-Disclosure Agreement (NDA) review automation
 paths:
   /check_safe_contract:
     post:
