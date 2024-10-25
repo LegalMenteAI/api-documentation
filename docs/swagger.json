@@ -1,86 +1,270 @@
 {
-    "openapi": "3.0.1",
+    "openapi": "3.0.3",
     "info": {
-        "title": "BAA Version 2 API",
-        "description": "API for checking BAA contracts in PDF format.",
-        "version": "1.0.0"
+      "title": "LegalMente AI's RedFlag Detection (RFD) AI",
+      "description": "Official API Documentation for LegalMente AI's RFD AI APIs that powers the AI-automated contract reviews on [LegalMenteAI](https://legalmente.ai/).",
+      "contact": {
+        "email": "douglas@legalmente.ai"
+      },
+      "version": "1.0.0"
+    },
+    "externalDocs": {
+      "description": "Find out more about LegalMente AI",
+      "url": "https://legalmente.ai/"
     },
     "servers": [
-        {
-            "url": "https://baa-contract-v2.azurewebsites.net/"
-        }
+      {
+        "url": "https://safeagreement.azurewebsites.net/",
+        "description": "Production Server Base URL for Simple Agreement for Future Equity (SAFE) review automation"
+      },
+      {
+        "url": "https://baa-contract-v2.azurewebsites.net/",
+        "description": "Production Server Base URL for Business Associate Agreement (BAA) review automation"
+      },
+      {
+        "url": "https://ndacontract.azurewebsites.net/",
+        "description": "Production Server Base URL for Non-Disclosure Agreement (NDA) review automation"
+      }
     ],
     "paths": {
-        "/check_baa_contract": {
-            "post": {
-                "summary": "Checks if the uploaded PDF is a valid BAA contract",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "filename": {
-                                        "type": "string",
-                                        "description": "Name of the file to check.",
-                                        "example": "Xploro - Template BAA - 17 May 2021.pdf"
-                                    },
-                                    "entity_type": {
-                                        "type": "string",
-                                        "description": "Type of entity involved.",
-                                        "enum": [
-                                            "covered entity",
-                                            "business associate"
-                                        ],
-                                        "example": "covered entity"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Returns the results of the BAA contract check.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "AI_Decision": {
-                                            "type": "string",
-                                            "description": "Decision made by the AI."
-                                        },
-                                        "AI_Message": {
-                                            "type": "string",
-                                            "description": "Message describing the AI decision."
-                                        },
-                                        "Alert_Type": {
-                                            "type": "string",
-                                            "description": "Type of alert, if any."
-                                        },
-                                        "Page_Number": {
-                                            "type": "integer",
-                                            "description": "Page number of the highlighted text."
-                                        },
-                                        "Text_To_Highlight": {
-                                            "type": "string",
-                                            "description": "Text that should be highlighted as per AI decision."
-                                        }
-                                    }
-                                }
-                            }
-                        }
+      "/check_nda_contract": {
+        "post": {
+          "tags": [
+            "RFD AI - NDA"
+          ],
+          "summary": "This automated review process checks if the provided PDF is a valid NDA; if so, it returns AI alerts; otherwise, it responds with \"invalid document\".",
+          "operationId": "checkNdaContract",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nda_type": {
+                      "type": "string",
+                      "description": "Type of NDA (healthcare or non Healthcare).",
+                      "enum": [
+                        "healthcare",
+                        "non Healthcare"
+                      ]
                     },
-                    "400": {
-                        "description": "Bad request when the input structure is not correct."
+                    "entity_type": {
+                      "type": "string",
+                      "description": "The role of the entity (discloser or receiver).",
+                      "enum": [
+                        "discloser",
+                        "receiver"
+                      ]
                     },
-                    "500": {
-                        "description": "Internal server error."
+                    "entity_name": {
+                      "type": "string",
+                      "description": "Name of the entity involved. Not amandatory field.",
+                      "example": "XYZ Corporation"
+                    },
+                    "filename": {
+                      "type": "string",
+                      "description": "Name of the file to check.",
+                      "example": "trade secret term testing 1.pdf"
                     }
+                  }
                 }
+              }
             }
+          },
+          "responses": {
+            "200": {
+              "description": "Returns the results of the NDA contract check.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "AI_Decision": {
+                        "type": "string",
+                        "description": "Decision made by the AI regarding the contract validity."
+                      },
+                      "AI_Message": {
+                        "type": "string",
+                        "description": "Message describing the AI decision."
+                      },
+                      "Alert_Type": {
+                        "type": "string",
+                        "description": "Type of alert, if any."
+                      },
+                      "Page_Number": {
+                        "type": "integer",
+                        "description": "Page number of the highlighted text."
+                      },
+                      "Text_To_Highlight": {
+                        "type": "string",
+                        "description": "Text that should be highlighted as per AI decision."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request when the input structure is not correct."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
         }
+      },
+      "/check_baa_contract": {
+        "post": {
+          "tags": [
+            "RFD AI - BAA"
+          ],
+          "summary": "This automated review process checks if the provided PDF is a valid BAA; if so, it returns AI alerts; otherwise, it responds with \"invalid document\".",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filename": {
+                      "type": "string",
+                      "description": "Name of the file to check.",
+                      "example": "Xploro - Template BAA - 17 May 2021.pdf"
+                    },
+                    "entity_type": {
+                      "type": "string",
+                      "description": "Type of entity involved.",
+                      "enum": [
+                        "covered entity",
+                        "business associate"
+                      ],
+                      "example": "covered entity"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Returns the results of the BAA contract check.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "AI_Decision": {
+                        "type": "string",
+                        "description": "Decision made by the AI."
+                      },
+                      "AI_Message": {
+                        "type": "string",
+                        "description": "Message describing the AI decision."
+                      },
+                      "Alert_Type": {
+                        "type": "string",
+                        "description": "Type of alert, if any."
+                      },
+                      "Page_Number": {
+                        "type": "integer",
+                        "description": "Page number of the highlighted text."
+                      },
+                      "Text_To_Highlight": {
+                        "type": "string",
+                        "description": "Text that should be highlighted as per AI decision."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request when the input structure is not correct."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+      },
+      "/check_safe_contract": {
+        "post": {
+          "tags": [
+            "RFD AI - SAFE"
+          ],
+          "summary": "Validates a SAFE contract PDF for specified criteria.",
+          "operationId": "checkSafeContract",
+          "parameters": [
+            {
+              "name": "filename",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The name of the SAFE contract file to be checked."
+            },
+            {
+              "name": "entity_type",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Type of the entity associated with the SAFE contract."
+            },
+            {
+              "name": "entity_name",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Name of the entity involved in the SAFE contract."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Returns the evaluation results of the SAFE contract.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "AI_Decision": {
+                        "type": "string",
+                        "description": "Decision made by AI regarding the contract's validity."
+                      },
+                      "AI_Message": {
+                        "type": "string",
+                        "description": "Additional message from AI regarding the decision."
+                      },
+                      "Alert_Type": {
+                        "type": "string",
+                        "description": "Type of alert, if any."
+                      },
+                      "Page_Number": {
+                        "type": "integer",
+                        "description": "Page number of the relevant text in the document."
+                      },
+                      "Text_To_Highlight": {
+                        "type": "string",
+                        "description": "Specific text recommended to be highlighted by AI."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request when the input structure is not correct or missing required fields."
+            },
+            "500": {
+              "description": "Internal server error indicating issues with server-side processing."
+            }
+          }
+        }
+      }
     }
-}
+  }
