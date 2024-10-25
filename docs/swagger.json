@@ -1,270 +1,260 @@
-{
-    "openapi": "3.0.3",
-    "info": {
-      "title": "LegalMente AI's RedFlag Detection (RFD) AI",
-      "description": "Official API Documentation for LegalMente AI's RFD AI APIs that powers the AI-automated contract reviews on [LegalMenteAI](https://legalmente.ai/).",
-      "contact": {
-        "email": "douglas@legalmente.ai"
-      },
-      "version": "1.0.0"
-    },
-    "externalDocs": {
-      "description": "Find out more about LegalMente AI",
-      "url": "https://legalmente.ai/"
-    },
-    "servers": [
-      {
-        "url": "https://safeagreement.azurewebsites.net/",
-        "description": "Production Server Base URL for Simple Agreement for Future Equity (SAFE) review automation"
-      },
-      {
-        "url": "https://baa-contract-v2.azurewebsites.net/",
-        "description": "Production Server Base URL for Business Associate Agreement (BAA) review automation"
-      },
-      {
-        "url": "https://ndacontract.azurewebsites.net/",
-        "description": "Production Server Base URL for Non-Disclosure Agreement (NDA) review automation"
-      }
-    ],
-    "paths": {
-      "/check_nda_contract": {
-        "post": {
-          "tags": [
-            "RFD AI - NDA"
-          ],
-          "summary": "This automated review process checks if the provided PDF is a valid NDA; if so, it returns AI alerts; otherwise, it responds with \"invalid document\".",
-          "operationId": "checkNdaContract",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "nda_type": {
-                      "type": "string",
-                      "description": "Type of NDA (healthcare or non Healthcare).",
-                      "enum": [
-                        "healthcare",
-                        "non Healthcare"
-                      ]
-                    },
-                    "entity_type": {
-                      "type": "string",
-                      "description": "The role of the entity (discloser or receiver).",
-                      "enum": [
-                        "discloser",
-                        "receiver"
-                      ]
-                    },
-                    "entity_name": {
-                      "type": "string",
-                      "description": "Name of the entity involved. Not amandatory field.",
-                      "example": "XYZ Corporation"
-                    },
-                    "filename": {
-                      "type": "string",
-                      "description": "Name of the file to check.",
-                      "example": "trade secret term testing 1.pdf"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Returns the results of the NDA contract check.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "AI_Decision": {
-                        "type": "string",
-                        "description": "Decision made by the AI regarding the contract validity."
-                      },
-                      "AI_Message": {
-                        "type": "string",
-                        "description": "Message describing the AI decision."
-                      },
-                      "Alert_Type": {
-                        "type": "string",
-                        "description": "Type of alert, if any."
-                      },
-                      "Page_Number": {
-                        "type": "integer",
-                        "description": "Page number of the highlighted text."
-                      },
-                      "Text_To_Highlight": {
-                        "type": "string",
-                        "description": "Text that should be highlighted as per AI decision."
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad request when the input structure is not correct."
-            },
-            "500": {
-              "description": "Internal server error."
-            }
-          }
-        }
-      },
-      "/check_baa_contract": {
-        "post": {
-          "tags": [
-            "RFD AI - BAA"
-          ],
-          "summary": "This automated review process checks if the provided PDF is a valid BAA; if so, it returns AI alerts; otherwise, it responds with \"invalid document\".",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "filename": {
-                      "type": "string",
-                      "description": "Name of the file to check.",
-                      "example": "Xploro - Template BAA - 17 May 2021.pdf"
-                    },
-                    "entity_type": {
-                      "type": "string",
-                      "description": "Type of entity involved.",
-                      "enum": [
-                        "covered entity",
-                        "business associate"
-                      ],
-                      "example": "covered entity"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "Returns the results of the BAA contract check.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "AI_Decision": {
-                        "type": "string",
-                        "description": "Decision made by the AI."
-                      },
-                      "AI_Message": {
-                        "type": "string",
-                        "description": "Message describing the AI decision."
-                      },
-                      "Alert_Type": {
-                        "type": "string",
-                        "description": "Type of alert, if any."
-                      },
-                      "Page_Number": {
-                        "type": "integer",
-                        "description": "Page number of the highlighted text."
-                      },
-                      "Text_To_Highlight": {
-                        "type": "string",
-                        "description": "Text that should be highlighted as per AI decision."
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad request when the input structure is not correct."
-            },
-            "500": {
-              "description": "Internal server error."
-            }
-          }
-        }
-      },
-      "/check_safe_contract": {
-        "post": {
-          "tags": [
-            "RFD AI - SAFE"
-          ],
-          "summary": "Validates a SAFE contract PDF for specified criteria.",
-          "operationId": "checkSafeContract",
-          "parameters": [
-            {
-              "name": "filename",
-              "in": "query",
-              "required": true,
-              "schema": {
-                "type": "string"
-              },
-              "description": "The name of the SAFE contract file to be checked."
-            },
-            {
-              "name": "entity_type",
-              "in": "query",
-              "required": true,
-              "schema": {
-                "type": "string"
-              },
-              "description": "Type of the entity associated with the SAFE contract."
-            },
-            {
-              "name": "entity_name",
-              "in": "query",
-              "required": true,
-              "schema": {
-                "type": "string"
-              },
-              "description": "Name of the entity involved in the SAFE contract."
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Returns the evaluation results of the SAFE contract.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "AI_Decision": {
-                        "type": "string",
-                        "description": "Decision made by AI regarding the contract's validity."
-                      },
-                      "AI_Message": {
-                        "type": "string",
-                        "description": "Additional message from AI regarding the decision."
-                      },
-                      "Alert_Type": {
-                        "type": "string",
-                        "description": "Type of alert, if any."
-                      },
-                      "Page_Number": {
-                        "type": "integer",
-                        "description": "Page number of the relevant text in the document."
-                      },
-                      "Text_To_Highlight": {
-                        "type": "string",
-                        "description": "Specific text recommended to be highlighted by AI."
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad request when the input structure is not correct or missing required fields."
-            },
-            "500": {
-              "description": "Internal server error indicating issues with server-side processing."
-            }
-          }
-        }
-      }
-    }
-  }
+openapi: 3.0.3
+info:
+  title: LegalMente AI™'s API Documentation
+  description: |
+    <b>LegalMente AI™</b> is an AI platform that helps with contract reviews using our <b>RedFlag Detection AI</b>, answers questions through our AI Paralegal, **Para**,  supports LLC and Corporation formation, offers legal document templates, and connects you with affordable licensed attorneys.
+    <br></br>
+      This is the official API Documentation for **RedFlag Detection AI** (for Business Associate Agreement (BAA), Non-Disclosure Agreement (NDA) & Simple Agreement for Future Equity (SAFE)) & **Para** (AI Paralegal assistant) APIs that powers on [LegalMente AI™](https://legalmente.ai/).
+      
+    ----
+    <br>**Quick Guide:**
+    | Access | Instructions |
+    |------|-------------|
+    | **To access Simple Agreement for Future Equity (SAFE) RedFlag Detection AI API**|  Select the "https://safeagreement.azurewebsites.net/ - Base URL for Simple Agreement for Future Equity (SAFE) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_safe_contract" path. |
+    | **To access Business Associate Agreement (BAA) RedFlag Detection AI API**|  Select the "https://baa-contract-v2.azurewebsites.net/ - Base URL for Business Associate Agreement (BAA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_baa_contract" path. |
+    | **To access Non-Disclosure Agreement (NDA) RedFlag Detection AI API**|  Select the "https://ndacontract.azurewebsites.net/ - Base URL for Non-Disclosure Agreement (NDA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_nda_contract" path. |</br>
+    
+    ----
+    **RedFlag Detection™ AI** uses a legal checklist similar to what a lawyer would follow, pinpointing any potential issues in NDA, SAFE, and BAA contracts.
+    
+    **RedFlag Detection AI's Output Parameters:**
+    | Output Component  | Description                                                        | Input Format |
+    |-------------------|--------------------------------------------------------------------|------|
+    | AI_Decision       | Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral] | string |
+    | AI_Message        | Message depending with respect to AI_Decision. | string|
+    | Alert_Type        | Name of the Alerts for each checklist. | string |
+    | Page_Number       | Page number(s) of the relevant text in the document. | integer |
+    | Text_To_Highlight | Specific text where AI highlighted the issue.  | string |
+    
+    ----
+    <br>_**Coming soon:** **Para** (AI Paralegal Assistant) APIs power LegalMente AI's Document Assistant, Legal and General Query Assistant, and Business Formation Assistant._</br>
+    <br>
+    
+  contact:
+    email: douglas@legalmente.ai
+  version: 1.0.0
+externalDocs:
+  description: Find out more about LegalMente AI
+  url: https://legalmente.ai/
+servers:
+- url: https://safeagreement.azurewebsites.net/
+  description: Production Server Base URL for Simple Agreement for Future Equity (SAFE) review automation
+- url: https://baa-contract-v2.azurewebsites.net/
+  description: Production Server Base URL for Business Associate Agreement (BAA) review automation
+- url: https://ndacontract.azurewebsites.net/
+  description: Production Server Base URL for Non-Disclosure Agreement (NDA) review automation
+paths:
+  /check_safe_contract:
+    post:
+      tags:
+      - Simple Agreement for Future Equity (SAFE) RedFlag Detection AI API
+      description: |
+        This automated review process checks if the provided PDF is a valid
+        SAFE; if so, it returns AI alerts; otherwise, it responds with "invalid document". 
+        ----
+        All PDFs are currently accessed via Azure Blob storage.
+        
+        ----
+        **SAFE RedFlag Detection AI's Input Parameters:**
+        | Output Component  | Description                                                        | Input format |
+        |-------------------|--------------------------------------------------------------------|------|
+        | filename          | Filename of the SAFE to process (acceptable file format - PDF) | string |
+        | entity_type       | Type of the entity [Investor or Company] | string |
+        | entity_name       | Name of the entity involved in the SAFE contract - Investor's or Company's Name | string |
+        
+        ----
+        _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+        
+      operationId: checkSafeContract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Filename of the SAFE to process (acceptable file format - PDF)
+                  example: SAFE for Emma Cartmell.pdf
+                entity_type:
+                  type: string
+                  description: Type of the entity [Investor or Company]
+                  example: Investor
+                entity_name:
+                  type: string
+                  description: Name of the entity involved in the SAFE contract.
+                  example: Emma Cartmell
+      responses:
+        '200':
+          description: Returns the evaluation results of the SAFE contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral]
+                  AI_Message:
+                    type: string
+                    description: 	Message depending with respect to AI_Decision.
+                  Alert_Type:
+                    type: string
+                    description: 	Name of the Alerts for each checklist.
+                  Page_Number:
+                    type: integer
+                    description: 	Page number(s) of the relevant text in the document.
+                  Text_To_Highlight:
+                    type: string
+                    description: Specific text where AI highlighted the issue.
+        '400':
+          description: Bad request when the input structure is not correct or missing
+            required fields.
+        '500':
+          description: Internal server error indicating issues with server-side processing.
+  /check_baa_contract:
+    post:
+      tags:
+      - Business Associate Agreement (BAA) RedFlag Detection AI API
+      description: |
+        This automated review process checks if the provided PDF is a valid
+        BAA; if so, it returns AI alerts; otherwise, it responds with "invalid document". 
+        ----
+        All PDFs are currently accessed via Azure Blob storage.
+        
+        ----
+        **BAA RedFlag Detection AI's Input Parameters:**
+        | Output Component  | Description                                                        | Input format |
+        |-------------------|--------------------------------------------------------------------|------|
+        | filename          | Filename of the BAA to process (acceptable file format - PDF) | string |
+        | entity_type       | Type of the entity [covered entity or business associate] | string |
+        | entity_name       | Name of the entity involved in the BAA contract - Covered Entity's or Business Associate's Name | string |
+        
+        ----
+        _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Filename of the BAA to process (acceptable file format - PDF)
+                  example: Xploro - Template BAA - 17 May 2021.pdf
+                entity_type:
+                  type: string
+                  description: Type of the entity [covered entity or business associate]
+                  enum:
+                  - covered entity
+                  - business associate
+                  example: covered entity
+                entity_name:
+                  type: string
+                  description: Name of the entity involved in the BAA contract.
+                  example: XYZ                  
+      responses:
+        '200':
+          description: Returns the results of the BAA contract check.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by the AI.
+                  AI_Message:
+                    type: string
+                    description: Message describing the AI decision.
+                  Alert_Type:
+                    type: string
+                    description: Type of alert, if any.
+                  Page_Number:
+                    type: integer
+                    description: Page number of the highlighted text.
+                  Text_To_Highlight:
+                    type: string
+                    description: Text that should be highlighted as per AI decision.
+        '400':
+          description: Bad request when the input structure is not correct.
+        '500':
+          description: Internal server error.
+  /check_nda_contract:
+    post:
+      tags:
+      - Non-Disclosure Agreement (NDA) RedFlag Detection AI API
+      description: |
+        This automated review process checks if the provided PDF is a valid
+        NDA; if so, it returns AI alerts; otherwise, it responds with "invalid document". 
+        ----
+        All PDFs are currently accessed via Azure Blob storage.
+        
+        ----
+        **NDA RedFlag Detection AI's Input Parameters:**
+        | Output Component  | Description                                                        | Input format |
+        |-------------------|--------------------------------------------------------------------|------|
+        | filename          | Filename of the NDA to process (acceptable file format - PDF) | string |
+        | entity_type       | Type of the entity [discloser or receiver] | string |
+        | nda_type          | Type of the NDA [healthcare or non Healthcare] | string |
+        | entity_name       | Name of the entity involved in the NDA contract - Covered Entity's or Business Associate's Name | string |
+        
+        ----
+        _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+      operationId: checkNdaContract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nda_type:
+                  type: string
+                  description: Type of NDA (healthcare or non Healthcare).
+                  enum:
+                  - healthcare
+                  - non Healthcare
+                entity_type:
+                  type: string
+                  description: The role of the entity (discloser or receiver).
+                  enum:
+                  - discloser
+                  - receiver
+                entity_name:
+                  type: string
+                  description: Name of the entity involved.
+                  example: XYZ Corporation
+                filename:
+                  type: string
+                  description: Name of the file to check.
+                  example: trade secret term testing 1.pdf
+      responses:
+        '200':
+          description: Returns the results of the NDA contract check.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by the AI regarding the contract validity.
+                  AI_Message:
+                    type: string
+                    description: Message describing the AI decision.
+                  Alert_Type:
+                    type: string
+                    description: Type of alert, if any.
+                  Page_Number:
+                    type: integer
+                    description: Page number of the highlighted text.
+                  Text_To_Highlight:
+                    type: string
+                    description: Text that should be highlighted as per AI decision.
+        '400':
+          description: Bad request when the input structure is not correct.
+        '500':
+          description: Internal server error.
