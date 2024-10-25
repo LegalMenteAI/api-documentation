@@ -65,6 +65,9 @@ paths:
         ----
         _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
         
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
       operationId: checkSafeContract
       requestBody:
         required: true
@@ -133,6 +136,10 @@ paths:
         
         ----
         _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
       requestBody:
         required: true
         content:
@@ -203,6 +210,10 @@ paths:
         
         ----
         _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
       operationId: checkNdaContract
       requestBody:
         required: true
