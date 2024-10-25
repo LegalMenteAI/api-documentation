@@ -1,0 +1,56 @@
+openapi: 3.0.1
+info:
+  title: BAA Version 2 API
+  description: API for checking BAA contracts in PDF format.
+  version: 1.0.0
+servers:
+  - url: https://baa-contract-v2.azurewebsites.net/
+paths:
+  /check_baa_contract:
+    post:
+      summary: Checks if the uploaded PDF is a valid BAA contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Name of the file to check.
+                  example: 'Xploro - Template BAA - 17 May 2021.pdf'
+                entity_type:
+                  type: string
+                  description: Type of entity involved.
+                  enum:
+                    - covered entity
+                    - business associate
+                  example: covered entity
+      responses:
+        '200':
+          description: Returns the results of the BAA contract check.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by the AI.
+                  AI_Message:
+                    type: string
+                    description: Message describing the AI decision.
+                  Alert_Type:
+                    type: string
+                    description: Type of alert, if any.
+                  Page_Number:
+                    type: integer
+                    description: Page number of the highlighted text.
+                  Text_To_Highlight:
+                    type: string
+                    description: Text that should be highlighted as per AI decision.
+        '400':
+          description: Bad request when the input structure is not correct.
+        '500':
+          description: Internal server error.
