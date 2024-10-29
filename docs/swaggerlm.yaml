@@ -10,6 +10,7 @@ info:
     <br>**Quick Guide:**
     | Access | Instructions |
     |------|-------------|
+    | **To upload the web accessible file to Azure Blob storage**|  Select the "https://azure-file-upload-swagger.azurewebsites.net/ - Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage." from the '**Servers**' dropdown and then send a POST request through "/azure_file_upload" path. |
     | **To access Simple Agreement for Future Equity (SAFE) RedFlag Detection AI API**|  Select the "https://safeagreement.azurewebsites.net/ - Base URL for Simple Agreement for Future Equity (SAFE) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_safe_contract" path. |
     | **To access Business Associate Agreement (BAA) RedFlag Detection AI API**|  Select the "https://baa-contract-v2.azurewebsites.net/ - Base URL for Business Associate Agreement (BAA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_baa_contract" path. |
     | **To access Non-Disclosure Agreement (NDA) RedFlag Detection AI API**|  Select the "https://ndacontract.azurewebsites.net/ - Base URL for Non-Disclosure Agreement (NDA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_nda_contract" path. |</br>
@@ -27,16 +28,21 @@ info:
     | Text_To_Highlight | Specific text where AI highlighted the issue.  | string |
     
     ----
+    **Recent Addition:** We’ve added an API that lets you upload your web-accessible files to LegalMente AI's Azure blob storage. The output file name provided can be used directly in the RedFlag Detection AI or Para APIs to receive responses for your uploaded file.
+    
+    ----
     <br>_**Coming soon:** **Para** (AI Paralegal Assistant) APIs power LegalMente AI's Document Assistant, Legal and General Query Assistant, and Business Formation Assistant._</br>
     <br>
     
   contact:
     email: douglas@legalmente.ai
-  version: 1.0.0
+  version: 1.0.1
 externalDocs:
   description: Find out more about LegalMente AI
   url: https://legalmente.ai/
 servers:
+- url: https://azure-file-upload-swagger.azurewebsites.net/
+  description: Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage.
 - url: https://safeagreement.azurewebsites.net/
   description: Base URL for Simple Agreement for Future Equity (SAFE) review automation
 - url: https://baa-contract-v2.azurewebsites.net/
@@ -44,6 +50,60 @@ servers:
 - url: https://ndacontract.azurewebsites.net/
   description: Base URL for Non-Disclosure Agreement (NDA) review automation
 paths:
+  /azure_file_upload:
+    post:
+      tags:
+      - First Step, Upload your web accessible file to LegalMente AI's Azure Blob storage to access them in below APIs.
+      description: |
+        This API will help you upload your web-accessible file to LegalMente AI's Azure Blob storage.
+        
+        -----
+        **Important Note:**
+        * Make sure the URL includes 'dl=1' for direct download access by Azure.
+        * If the uploaded file is for the RedFlag Detection AI API, it must be in PDF format.
+        * Check the **"Response body"** for your Output File name or Error. _Example, "PDF successfully uploaded to blob storage as 'sample_safe.pdf'."_
+        
+        ----
+        All files are currently accessed via Azure Blob storage.
+        
+        ----
+        **Input Parameters:**
+        | Component  | Description                                                        | Input format |
+        |-------------------|--------------------------------------------------------------------|------|
+        | url          | URL of the Web accessible file | string |
+        
+       
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
+      operationId: azurefileupload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: Downloadable Web accessible URL link
+                  example: https://www.dropbox.com/scl/fi/9o5vaut848xfdg5f9t23n/sample_safe.pdf?rlkey=zcb1zxdaan5ubizib2tvsf7sv&st=eigxzhje&dl=1
+      responses:
+        '200':
+          description: Returns the name of the file uploaded in Azure blob storage.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                    description: Name of the file.
+        '400':
+          description: Bad request when the input structure is not correct or missing
+            required fields.
+        '500':
+          description: Internal server error indicating issues with server-side processing.
   /check_safe_contract:
     post:
       tags:
@@ -56,7 +116,7 @@ paths:
         
         ----
         **SAFE RedFlag Detection AI's Input Parameters:**
-        | Output Component  | Description                                                        | Input format |
+        | Component  | Description                                                        | Input format |
         |-------------------|--------------------------------------------------------------------|------|
         | filename          | Filename of the SAFE to process (acceptable file format - PDF) | string |
         | entity_type       | Type of the entity [Investor or Company] | string |
@@ -128,7 +188,7 @@ paths:
         
         ----
         **BAA RedFlag Detection AI's Input Parameters:**
-        | Output Component  | Description                                                        | Input format |
+        | Component  | Description                                                        | Input format |
         |-------------------|--------------------------------------------------------------------|------|
         | filename          | Filename of the BAA to process (acceptable file format - PDF) | string |
         | entity_type       | Type of the entity [covered entity or business associate] | string |
@@ -201,7 +261,7 @@ paths:
         
         ----
         **NDA RedFlag Detection AI's Input Parameters:**
-        | Output Component  | Description                                                        | Input format |
+        | Component  | Description                                                        | Input format |
         |-------------------|--------------------------------------------------------------------|------|
         | filename          | Filename of the NDA to process (acceptable file format - PDF) | string |
         | entity_type       | Type of the entity [discloser or receiver] | string |
