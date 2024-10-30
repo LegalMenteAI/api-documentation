@@ -10,7 +10,7 @@ info:
     <br>**Quick Guide:**
     | Access | Instructions |
     |------|-------------|
-    | **To upload the web accessible file to Azure Blob storage**|  Select the "https://azure-file-upload-swagger.azurewebsites.net/ - Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage." from the '**Servers**' dropdown and then send a POST request through "/azure_file_upload" path. |
+    | **To upload the web accessible file to Azure Blob storage**|  Select the "https://lm-file-upload.azurewebsites.net/ - Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage." from the '**Servers**' dropdown and then send a POST request through "/file_upload" path. |
     | **To access Simple Agreement for Future Equity (SAFE) RedFlag Detection AI API**|  Select the "https://safeagreement.azurewebsites.net/ - Base URL for Simple Agreement for Future Equity (SAFE) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_safe_contract" path. |
     | **To access Business Associate Agreement (BAA) RedFlag Detection AI API**|  Select the "https://baa-contract-v2.azurewebsites.net/ - Base URL for Business Associate Agreement (BAA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_baa_contract" path. |
     | **To access Non-Disclosure Agreement (NDA) RedFlag Detection AI API**|  Select the "https://ndacontract.azurewebsites.net/ - Base URL for Non-Disclosure Agreement (NDA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_nda_contract" path. |</br>
@@ -41,7 +41,7 @@ externalDocs:
   description: Find out more about LegalMente AI
   url: https://legalmente.ai/
 servers:
-- url: https://azure-file-upload-swagger.azurewebsites.net/
+- url: https://lm-file-upload.azurewebsites.net/
   description: Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage.
 - url: https://safeagreement.azurewebsites.net/
   description: Base URL for Simple Agreement for Future Equity (SAFE) review automation
@@ -50,7 +50,7 @@ servers:
 - url: https://ndacontract.azurewebsites.net/
   description: Base URL for Non-Disclosure Agreement (NDA) review automation
 paths:
-  /azure_file_upload:
+  /file_upload:
     post:
       tags:
       - First Step, Upload your web accessible file to LegalMente AI's Azure Blob storage to access them in below APIs.
@@ -59,7 +59,6 @@ paths:
         
         -----
         **Important Note:**
-        * Make sure the URL includes 'dl=1' for direct download access by Azure.
         * If the uploaded file is for the RedFlag Detection AI API, it must be in PDF format.
         * Check the **"Response body"** for your Output File name or Error. _Example, "PDF successfully uploaded to blob storage as 'sample_safe.pdf'."_
         
@@ -76,7 +75,7 @@ paths:
         ----
         ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
         
-      operationId: azurefileupload
+      operationId: fileupload
       requestBody:
         required: true
         content:
