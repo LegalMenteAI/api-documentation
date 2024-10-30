@@ -139,7 +139,7 @@ paths:
                 filename:
                   type: string
                   description: Filename of the SAFE to process (acceptable file format - PDF)
-                  example: SAFE for Emma Cartmell.pdf
+                  example: SAFE.pdf
                 entity_type:
                   type: string
                   description: Type of the entity [Investor or Company]
@@ -147,7 +147,7 @@ paths:
                 entity_name:
                   type: string
                   description: Name of the entity involved in the SAFE contract.
-                  example: Emma Cartmell
+                  example: Jane Smith
       responses:
         '200':
           description: Returns the evaluation results of the SAFE contract.
@@ -210,7 +210,7 @@ paths:
                 filename:
                   type: string
                   description: Filename of the BAA to process (acceptable file format - PDF)
-                  example: Xploro - Template BAA - 17 May 2021.pdf
+                  example: BAA.pdf
                 entity_type:
                   type: string
                   description: Type of the entity [covered entity or business associate]
@@ -221,7 +221,7 @@ paths:
                 entity_name:
                   type: string
                   description: Name of the entity involved in the BAA contract.
-                  example: XYZ                  
+                  example: Jane Smith                  
       responses:
         '200':
           description: Returns the results of the BAA contract check.
@@ -297,11 +297,11 @@ paths:
                 entity_name:
                   type: string
                   description: Name of the entity involved.
-                  example: XYZ Corporation
+                  example: Jane Smith
                 filename:
                   type: string
                   description: Name of the file to check.
-                  example: trade secret term testing 1.pdf
+                  example: NDA.pdf
       responses:
         '200':
           description: Returns the results of the NDA contract check.
