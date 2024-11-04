@@ -19,11 +19,11 @@ info:
     **RedFlag Detection™ AI** uses a legal checklist similar to what a lawyer would follow, pinpointing any potential issues in NDA, SAFE, and BAA contracts.
     
     **RedFlag Detection AI's Output Parameters:**
-    | Output Component  | Description                                                        | Input Format |
+    | Output Component  | Description                                                        | Output Format |
     |-------------------|--------------------------------------------------------------------|------|
     | AI_Decision       | Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral] | string |
     | AI_Message        | Message depending with respect to AI_Decision. | string|
-    | Alert_Type        | Name of the Alerts for each checklist. | string |
+    | Alert_Type        | Alert categories per the Jose's playbook. | string |
     | Page_Number       | Page number(s) of the relevant text in the document. | integer |
     | Text_To_Highlight | Specific text where AI highlighted the issue.  | string |
     
@@ -67,11 +67,10 @@ paths:
         
         ----
         **Input Parameters:**
-        | Component  | Description                                                        | Input format |
-        |-------------------|--------------------------------------------------------------------|------|
-        | url          | URL of the Web accessible file | string |
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|-------------------------------------------------------------|--------------|-------------------|
+        | url        | URL of the Web accessible file | string | Required |
         
-       
         ----
         ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
         
@@ -115,12 +114,14 @@ paths:
         
         ----
         **SAFE RedFlag Detection AI's Input Parameters:**
-        | Component  | Description                                                        | Input format |
-        |-------------------|--------------------------------------------------------------------|------|
-        | filename          | Filename of the SAFE to process (acceptable file format - PDF) | string |
-        | entity_type       | Type of the entity [Investor or Company] | string |
-        | entity_name       | Name of the entity involved in the SAFE contract - Investor's or Company's Name | string |
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|-------------------------------------------------------------|--------------|-------------------|
+        | filename          | Filename of the SAFE to process (acceptable file format - PDF) | string | Required |
+        | entity_type       | Type of the entity [Investor or Company] | string | Required |
+        | entity_name       | Name of the entity involved in the SAFE contract - Investor's or Company's Name | string | Optional |
         
+        _*While **'entity_name'** is optional, including it will improve accuracy._
+
         ----
         _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
         
@@ -187,12 +188,14 @@ paths:
         
         ----
         **BAA RedFlag Detection AI's Input Parameters:**
-        | Component  | Description                                                        | Input format |
-        |-------------------|--------------------------------------------------------------------|------|
-        | filename          | Filename of the BAA to process (acceptable file format - PDF) | string |
-        | entity_type       | Type of the entity [covered entity or business associate] | string |
-        | entity_name       | Name of the entity involved in the BAA contract - Covered Entity's or Business Associate's Name | string |
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|--------------------------------------------------------------------|------|------|
+        | filename          | Filename of the BAA to process (acceptable file format - PDF) | string | Required |
+        | entity_type       | Type of the entity [covered entity or business associate] | string | Required |
+        | entity_name       | Name of the entity involved in the BAA contract - Covered Entity's or Business Associate's Name | string | Optional |
         
+        _*While **'entity_name'** is optional, including it will improve accuracy._
+
         ----
         _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
 
@@ -260,13 +263,15 @@ paths:
         
         ----
         **NDA RedFlag Detection AI's Input Parameters:**
-        | Component  | Description                                                        | Input format |
-        |-------------------|--------------------------------------------------------------------|------|
-        | filename          | Filename of the NDA to process (acceptable file format - PDF) | string |
-        | entity_type       | Type of the entity [discloser or receiver] | string |
-        | nda_type          | Type of the NDA [healthcare or non Healthcare] | string |
-        | entity_name       | Name of the entity involved in the NDA contract - Covered Entity's or Business Associate's Name | string |
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|--------------------------------------------------------------------|------|------|
+        | filename          | Filename of the NDA to process (acceptable file format - PDF) | string | Required |
+        | entity_type       | Type of the entity [discloser or receiver] | string | Required |
+        | nda_type          | Type of the NDA [healthcare or non Healthcare] | string | Required |
+        | entity_name       | Name of the entity involved in the NDA contract - Covered Entity's or Business Associate's Name | string | Optional |
         
+        _*While **'entity_name'** is optional, including it will improve accuracy._
+
         ----
         _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
 
