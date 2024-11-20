@@ -13,7 +13,11 @@ window.onload = function() {
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
+    layout: "StandaloneLayout",
+    requestInterceptor: (req) => {
+        req.headers['X-Custom-Swagger-Header'] = 'swagger_lm_docs';
+        return req;
+    }
   });
 
   //</editor-fold>
