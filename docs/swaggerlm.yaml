@@ -87,7 +87,7 @@ paths:
             schema:
               type: object
               properties:
-                url:
+                User ID:
                   type: string
                   description: User ID
                   example: "Swagger-UnitedHealth Group"
