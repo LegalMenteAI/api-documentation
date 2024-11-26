@@ -1,0 +1,335 @@
+openapi: 3.0.3
+info:
+  title: LegalMente AI™'s API Documentation
+  description: |
+    <b>LegalMente AI™</b> is an AI platform that helps with contract reviews using our <b>RedFlag Detection AI</b>, answers questions through our AI Paralegal, **Para**,  supports LLC and Corporation formation, offers legal document templates, and connects you with affordable licensed attorneys.
+    <br></br>
+      This is the official API Documentation for **RedFlag Detection AI** (for Business Associate Agreement (BAA), Non-Disclosure Agreement (NDA) & Simple Agreement for Future Equity (SAFE)) & **Para** (AI Paralegal assistant) APIs that powers on [LegalMente AI™](https://legalmente.ai/).
+      
+    ----
+    <br>**Quick Guide:**
+    | Access | Instructions |
+    |------|-------------|
+    | **To upload the web accessible file to Azure Blob storage**|  Select the "https://lm-file-upload.azurewebsites.net/ - Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage." from the '**Servers**' dropdown and then send a POST request through "/file_upload" path. |
+    | **To access Simple Agreement for Future Equity (SAFE) RedFlag Detection AI API**|  Select the "https://safeagreement.azurewebsites.net/ - Base URL for Simple Agreement for Future Equity (SAFE) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_safe_contract" path. |
+    | **To access Business Associate Agreement (BAA) RedFlag Detection AI API**|  Select the "https://baa-contract-v2.azurewebsites.net/ - Base URL for Business Associate Agreement (BAA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_baa_contract" path. |
+    | **To access Non-Disclosure Agreement (NDA) RedFlag Detection AI API**|  Select the "https://ndacontract.azurewebsites.net/ - Base URL for Non-Disclosure Agreement (NDA) review automation" from the '**Servers**' dropdown and then send a POST request through "/check_nda_contract" path. |</br>
+    
+    ----
+    **RedFlag Detection™ AI** uses a legal checklist similar to what a lawyer would follow, pinpointing any potential issues in NDA, SAFE, and BAA contracts.
+    
+    **RedFlag Detection AI's Output Parameters:**
+    | Output Component  | Description                                                        | Output Format |
+    |-------------------|--------------------------------------------------------------------|------|
+    | AI_Decision       | Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral] | string |
+    | AI_Message        | Message depending with respect to AI_Decision. | string|
+    | Alert_Type        | Alert categories per the Jose's playbook. | string |
+    | Page_Number       | Page number(s) of the relevant text in the document. | integer |
+    | Text_To_Highlight | Specific text where AI highlighted the issue.  | string |
+    
+    ----
+    **Recent Addition:** We’ve added an API that lets you upload your web-accessible files to LegalMente AI's Azure blob storage. The output file name provided can be used directly in the RedFlag Detection AI or Para APIs to receive responses for your uploaded file.
+    
+    ----
+    <br>_**Coming soon:** **Para** (AI Paralegal Assistant) APIs power LegalMente AI's Document Assistant, Legal and General Query Assistant, and Business Formation Assistant._</br>
+    <br>
+    
+  contact:
+    email: douglas@legalmente.ai
+  version: 1.0.1
+externalDocs:
+  description: Find out more about LegalMente AI
+  url: https://legalmente.ai/
+servers:
+- url: https://lm-file-upload.azurewebsites.net/
+  description: Base URL for Web accessible file upload to LegalMente AI's Azure Blob Storage.
+- url: https://safeagreement.azurewebsites.net/
+  description: Base URL for Simple Agreement for Future Equity (SAFE) review automation
+- url: https://baa-contract-v2.azurewebsites.net/
+  description: Base URL for Business Associate Agreement (BAA) review automation
+- url: https://ndacontract.azurewebsites.net/
+  description: Base URL for Non-Disclosure Agreement (NDA) review automation
+paths:
+  /file_upload:
+    post:
+      tags:
+      - First Step, Upload your web accessible file to LegalMente AI's Azure Blob storage to access them in below APIs.
+      description: |
+        This API will help you upload your web-accessible file to LegalMente AI's Azure Blob storage.
+        
+        -----
+        **Important Note:**
+        * If the uploaded file is for the RedFlag Detection AI API, it must be in PDF format.
+        * Check the **"Response body"** for your Output File name or Error. _Example, "PDF successfully uploaded to blob storage as 'sample_safe.pdf'."_
+        
+        ----
+        All files are currently accessed via Azure Blob storage.
+        
+        ----
+        **Input Parameters:**
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|-------------------------------------------------------------|--------------|-------------------|
+        | url        | URL of the Web accessible file | string | Required |
+        
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
+      operationId: fileupload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: Downloadable Web accessible URL link
+                  example: https://www.dropbox.com/scl/fi/9o5vaut848xfdg5f9t23n/sample_safe.pdf?rlkey=zcb1zxdaan5ubizib2tvsf7sv&st=eigxzhje&dl=1
+      responses:
+        '200':
+          description: Returns the name of the file uploaded in Azure blob storage.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  output:
+                    type: string
+                    description: Name of the file.
+        '400':
+          description: Bad request when the input structure is not correct or missing
+            required fields.
+        '500':
+          description: Internal server error indicating issues with server-side processing.
+  /check_safe_contract:
+    post:
+      tags:
+      - Simple Agreement for Future Equity (SAFE) RedFlag Detection AI API
+      description: |
+        This automated review process checks if the provided PDF is a valid
+        SAFE; if so, it returns AI alerts; otherwise, it responds with "invalid document". 
+        ----
+        All PDFs are currently accessed via Azure Blob storage.
+        
+        ----
+        **SAFE RedFlag Detection AI's Input Parameters:**
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|-------------------------------------------------------------|--------------|-------------------|
+        | filename          | Filename of the SAFE to process (acceptable file format - PDF) | string | Required |
+        | entity_type       | Type of the entity [Investor or Company] | string | Required |
+        | entity_name       | Name of the entity involved in the SAFE contract - Investor's or Company's Name | string | Optional |
+        
+        _*While **'entity_name'** is optional, including it will improve accuracy._
+
+        ----
+        _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+        
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
+      operationId: checkSafeContract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Filename of the SAFE to process (acceptable file format - PDF)
+                  example: SAFE.pdf
+                entity_type:
+                  type: string
+                  description: Type of the entity [Investor or Company]
+                  example: Investor
+                entity_name:
+                  type: string
+                  description: Name of the entity involved in the SAFE contract.
+                  example: Jane Smith
+      responses:
+        '200':
+          description: Returns the evaluation results of the SAFE contract.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral]
+                  AI_Message:
+                    type: string
+                    description:   Message depending with respect to AI_Decision.
+                  Alert_Type:
+                    type: string
+                    description:   Name of the Alerts for each checklist.
+                  Page_Number:
+                    type: integer
+                    description:   Page number(s) of the relevant text in the document.
+                  Text_To_Highlight:
+                    type: string
+                    description: Specific text where AI highlighted the issue.
+        '400':
+          description: Bad request when the input structure is not correct or missing
+            required fields.
+        '500':
+          description: Internal server error indicating issues with server-side processing.
+  /check_baa_contract:
+    post:
+      tags:
+      - Business Associate Agreement (BAA) RedFlag Detection AI API
+      description: |
+        This automated review process checks if the provided PDF is a valid
+        BAA; if so, it returns AI alerts; otherwise, it responds with "invalid document". 
+        ----
+        All PDFs are currently accessed via Azure Blob storage.
+        
+        ----
+        **BAA RedFlag Detection AI's Input Parameters:**
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|--------------------------------------------------------------------|------|------|
+        | filename          | Filename of the BAA to process (acceptable file format - PDF) | string | Required |
+        | entity_type       | Type of the entity [covered entity or business associate] | string | Required |
+        | entity_name       | Name of the entity involved in the BAA contract - Covered Entity's or Business Associate's Name | string | Optional |
+        
+        _*While **'entity_name'** is optional, including it will improve accuracy._
+
+        ----
+        _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: Filename of the BAA to process (acceptable file format - PDF)
+                  example: BAA.pdf
+                entity_type:
+                  type: string
+                  description: Type of the entity [covered entity or business associate]
+                  enum:
+                  - covered entity
+                  - business associate
+                  example: covered entity
+                entity_name:
+                  type: string
+                  description: Name of the entity involved in the BAA contract.
+                  example: Jane Smith                  
+      responses:
+        '200':
+          description: Returns the results of the BAA contract check.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by the AI.
+                  AI_Message:
+                    type: string
+                    description: Message describing the AI decision.
+                  Alert_Type:
+                    type: string
+                    description: Type of alert, if any.
+                  Page_Number:
+                    type: integer
+                    description: Page number of the highlighted text.
+                  Text_To_Highlight:
+                    type: string
+                    description: Text that should be highlighted as per AI decision.
+        '400':
+          description: Bad request when the input structure is not correct.
+        '500':
+          description: Internal server error.
+  /check_nda_contract:
+    post:
+      tags:
+      - Non-Disclosure Agreement (NDA) RedFlag Detection AI API
+      description: |
+        This automated review process checks if the provided PDF is a valid
+        NDA; if so, it returns AI alerts; otherwise, it responds with "invalid document". 
+        ----
+        All PDFs are currently accessed via Azure Blob storage.
+        
+        ----
+        **NDA RedFlag Detection AI's Input Parameters:**
+        | Component  | Description                                                        | Input format | Field Requirement |
+        |-------------------|--------------------------------------------------------------------|------|------|
+        | filename          | Filename of the NDA to process (acceptable file format - PDF) | string | Required |
+        | entity_type       | Type of the entity [discloser or receiver] | string | Required |
+        | nda_type          | Type of the NDA [healthcare or non Healthcare] | string | Required |
+        | entity_name       | Name of the entity involved in the NDA contract - Covered Entity's or Business Associate's Name | string | Optional |
+        
+        _*While **'entity_name'** is optional, including it will improve accuracy._
+
+        ----
+        _Refer the "RedFlag Detection AI's Output Parameters" above for output description._
+
+        ----
+        ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
+        
+      operationId: checkNdaContract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nda_type:
+                  type: string
+                  description: Type of NDA (healthcare or non Healthcare).
+                  enum:
+                  - healthcare
+                  - non Healthcare
+                entity_type:
+                  type: string
+                  description: The role of the entity (discloser or receiver).
+                  enum:
+                  - discloser
+                  - receiver
+                entity_name:
+                  type: string
+                  description: Name of the entity involved.
+                  example: Jane Smith
+                filename:
+                  type: string
+                  description: Name of the file to check.
+                  example: NDA.pdf
+      responses:
+        '200':
+          description: Returns the results of the NDA contract check.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AI_Decision:
+                    type: string
+                    description: Decision made by the AI regarding the contract validity.
+                  AI_Message:
+                    type: string
+                    description: Message describing the AI decision.
+                  Alert_Type:
+                    type: string
+                    description: Type of alert, if any.
+                  Page_Number:
+                    type: integer
+                    description: Page number of the highlighted text.
+                  Text_To_Highlight:
+                    type: string
+                    description: Text that should be highlighted as per AI decision.
+        '400':
+          description: Bad request when the input structure is not correct.
+        '500':
+          description: Internal server error.
