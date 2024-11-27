@@ -22,7 +22,7 @@ info:
     |-------------------|--------------------------------------------------------------------|------|
     | AI_Decision       | Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral] | string |
     | AI_Message        | Message depending with respect to AI_Decision. | string|
-    | Alert_Type        | Alert categories per the Jose's playbook. | string |
+    | Alert_Type        | These are the different review categories for a contract based on the Lawyer's playbook. | string |
     | Page_Number       | Page number(s) of the relevant text in the document. | integer |
     | Text_To_Highlight | Specific text where AI highlighted the issue.  | string |
     
