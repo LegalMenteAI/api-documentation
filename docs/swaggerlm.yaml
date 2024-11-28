@@ -21,7 +21,7 @@ info:
     | Output Component  | Description                                                        | Output Format |
     |-------------------|--------------------------------------------------------------------|------|
     | AI_Decision       | Decision made by AI regarding the checklist's validity in the Contract. [Pass, Fail, Neutral] | string |
-    | AI_Message        | Message depending with respect to AI_Decision. | string|
+    | AI_Message        | A brief, AI-generated message explaining why a clause/statement in the Contract is acceptable, re-negotiable, or has a neutral informational opinion for each of the review categories. | string|
     | Alert_Type        | These are the different review categories for a contract based on the Lawyer's playbook. | string |
     | Page_Number       | Page number(s) of the relevant text in the document. | integer |
     | Text_To_Highlight | Specific text where AI highlighted the issue.  | string |
