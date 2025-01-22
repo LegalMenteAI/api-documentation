@@ -296,7 +296,7 @@ paths:
           description: Bad request when the input structure is not correct.
         '500':
           description: Internal server error.
-  /list_templates:
+  /list-templates:
     post:
       tags:
       - Pre-defined Templates
