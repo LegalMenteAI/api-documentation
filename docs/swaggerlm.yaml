@@ -13,7 +13,7 @@ info:
     | **To get API Key**|  Select the "**https://lm-redflag-detection-ai.azurewebsites.net/** - Base URL for SAFE/NDA/BAA review automation and to get API Key" from the '**Servers**' dropdown and then send a POST request through "**/get_api_key**" path. |
     | **To access Simple Agreement for Future Equity (SAFE), Business Associate Agreement (BAA) & Non-Disclosure Agreement (NDA) RedFlag Detection™ AI API**|  Select the "**https://lm-redflag-detection-ai.azurewebsites.net/** - Base URL for SAFE/NDA/BAA review automation and to get API Key" from the '**Servers**' dropdown and then send a POST request through "**/document_response**" path. |
     | **To access Para General and Para Document**|  Select the "**https://lm-para-assistant.azurewebsites.net/** - Base URL to access Para General and Para Document" from the '**Servers**' dropdown and then send a POST request through "**/ai_response**" path. |
-    | **To view all Pre-drafted Templates and download selected Template**|  Select the "**https://lm-pre-defined-templates.azurewebsites.net/** - Base URL to access Pre-drafted Templates" from the '**Servers**' dropdown and then send a POST request through "**/list-templates**" path to get details of all the Templates. Select the **"template_id"** from the '**above POST request to view all templates**' and then send a POST request to "**https://lm-pre-defined-templates.azurewebsites.net//download-template?template_id=<>&api_key=<>**" to download the selected template. **_Remember to replace the first '<>' with selected template_id and second '<>' with API Key._** |</br>
+    | **To view all Pre-drafted Templates and download selected Template**|  Select the "**https://lm-pre-drafted-templates.azurewebsites.net/** - Base URL to access Pre-drafted Templates" from the '**Servers**' dropdown and then send a POST request through "**/list-templates**" path to get details of all the Templates. Select the **"template_id"** from the '**above POST request to view all templates**' and then send a POST request to "**https://lm-pre-drafted-templates.azurewebsites.net/download-template?template_id=<>&api_key=<>**" to download the selected template. **_Remember to replace the first '<>' with selected template_id and second '<>' with API Key._** |</br>
     
     ----
     **RedFlag Detection™ AI** uses a legal playbook similar to what a lawyer would follow, pinpointing any potential issues in NDA, SAFE, and BAA contracts.
@@ -70,7 +70,7 @@ servers:
   description: Base URL for SAFE/NDA/BAA review automation and to get API Key
 - url: https://lm-para-assistant.azurewebsites.net/
   description: Base URL to access Para General and Para Document
-- url: https://lm-pre-defined-templates.azurewebsites.net/
+- url: https://lm-pre-drafted-templates.azurewebsites.net/
   description: Base URL to access Pre-drafted Templates 
 paths:
   /get_api_key:
@@ -315,7 +315,7 @@ paths:
         
         ----
         **Remember:**
-        _When you send a request to this endpoint, you can view the details of all the templates available on our official website. To download a specific template, use the API: **https://lm-pre-defined-templates.azurewebsites.net/download-template?template_id=<>&api_key=<>**. Replace the first '**<>**' with the desired **template_id** from this endpoint's response and the second '**<>**' with your **api_key**._
+        _When you send a request to this endpoint, you can view the details of all the templates available on our official website. To download a specific template, use the API: **https://lm-pre-drafted-templates.azurewebsites.net/download-template?template_id=<>&api_key=<>**. Replace the first '**<>**' with the desired **template_id** from this endpoint's response and the second '**<>**' with your **api_key**._
         
         ----
         ***If you see a **"Failed to fetch"** error, select the appropriate server from the Servers dropdown as described above.*
