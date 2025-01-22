@@ -15,7 +15,7 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout",
     requestInterceptor: (req) => {
-        req.headers['X-Custom-Swagger-Header'] = 'swagger_lm_docs';
+        // req.headers['X-Custom-Swagger-Header'] = 'swagger_lm_docs';
         return req;
     }
   });
