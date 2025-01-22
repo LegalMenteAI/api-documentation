@@ -4,7 +4,7 @@ info:
   description: |
     <b>LegalMente AI™</b> is an AI platform that helps with contract reviews using our <b>RedFlag Detection AI</b>, answers questions through our AI Paralegal, **Para**,  supports LLC and Corporation formation, offers legal document templates, and connects you with affordable licensed attorneys.
     <br></br>
-      This is the official API Documentation for **RedFlag Detection AI** (for Business Associate Agreement (BAA), Non-Disclosure Agreement (NDA) & Simple Agreement for Future Equity (SAFE)), **Para** (AI Paralegal assistant) & **Pre-defined Templates** APIs that powers on [LegalMente AI™](https://legalmente.ai/).
+      This is the official API Documentation for **RedFlag Detection AI** (for Business Associate Agreement (BAA), Non-Disclosure Agreement (NDA) & Simple Agreement for Future Equity (SAFE)), **Para** (AI Paralegal assistant) & **Pre-drafted Templates** APIs that powers on [LegalMente AI™](https://legalmente.ai/).
       
     ----
     <br>**Quick Guide:**
@@ -13,7 +13,7 @@ info:
     | **To get API Key**|  Select the "**https://lm-redflag-detection-ai.azurewebsites.net/** - Base URL for SAFE/NDA/BAA review automation and to get API Key" from the '**Servers**' dropdown and then send a POST request through "**/get_api_key**" path. |
     | **To access Simple Agreement for Future Equity (SAFE), Business Associate Agreement (BAA) & Non-Disclosure Agreement (NDA) RedFlag Detection™ AI API**|  Select the "**https://lm-redflag-detection-ai.azurewebsites.net/** - Base URL for SAFE/NDA/BAA review automation and to get API Key" from the '**Servers**' dropdown and then send a POST request through "**/document_response**" path. |
     | **To access Para General and Para Document**|  Select the "**https://lm-para-assistant.azurewebsites.net/** - Base URL to access Para General and Para Document" from the '**Servers**' dropdown and then send a POST request through "**/ai_response**" path. |
-    | **To view all Pre-defined Templates and download selected Template**|  Select the "**https://lm-pre-defined-templates.azurewebsites.net/** - Base URL to access Pre-defined Templates" from the '**Servers**' dropdown and then send a POST request through "**/list-templates**" path to get details of all the Templates. Select the **"template_id"** from the '**above POST request to view all templates**' and then send a POST request to "**https://lm-pre-defined-templates.azurewebsites.net//download-template?template_id=<>&api_key=<>**" to download the selected template. **_Remember to replace the first '<>' with selected template_id and second '<>' with API Key._** |</br>
+    | **To view all Pre-drafted Templates and download selected Template**|  Select the "**https://lm-pre-defined-templates.azurewebsites.net/** - Base URL to access Pre-drafted Templates" from the '**Servers**' dropdown and then send a POST request through "**/list-templates**" path to get details of all the Templates. Select the **"template_id"** from the '**above POST request to view all templates**' and then send a POST request to "**https://lm-pre-defined-templates.azurewebsites.net//download-template?template_id=<>&api_key=<>**" to download the selected template. **_Remember to replace the first '<>' with selected template_id and second '<>' with API Key._** |</br>
     
     ----
     **RedFlag Detection™ AI** uses a legal playbook similar to what a lawyer would follow, pinpointing any potential issues in NDA, SAFE, and BAA contracts.
@@ -46,9 +46,9 @@ info:
     | metadata | A JSON object containing multiple arrays that specify the sources Para™ referenced to generate the response. | json |Available through Para™ Document Output Response. |
     
     ----
-    **Pre-defined Templates on LegalMente AI™** are ready-to-use legal documents for common business and legal needs. Users can download, customize, and edit them to fit their requirements while meeting legal standards.
+    **Pre-drafted Templates on LegalMente AI™** are ready-to-use legal documents for common business and legal needs. Users can download, customize, and edit them to fit their requirements while meeting legal standards.
     
-    **Pre-defined Templates' Output Parameters:**
+    **Pre-drafted Templates' Output Parameters:**
     | Output Component  | Description                                                        | Output Format |
     |-------------------|--------------------------------------------------------------------|------|
     | category_name       | Indicates the category to which the template belongs. This helps group templates based on their usage domain, such as "Healthcare", "Capital Markets" or "Other". | string |
@@ -71,7 +71,7 @@ servers:
 - url: https://lm-para-assistant.azurewebsites.net/
   description: Base URL to access Para General and Para Document
 - url: https://lm-pre-defined-templates.azurewebsites.net/
-  description: Base URL to access Pre-defined Templates 
+  description: Base URL to access Pre-drafted Templates 
 paths:
   /get_api_key:
     post:
@@ -299,9 +299,9 @@ paths:
   /list-templates:
     post:
       tags:
-      - Pre-defined Templates
+      - Pre-drafted Templates
       description: |
-        Pre-defined Templates are ready-to-use legal documents for common business and legal needs.
+        Pre-drafted Templates are ready-to-use legal documents for common business and legal needs.
         
         -----
         **Important Note:**
@@ -334,7 +334,7 @@ paths:
                   example: "abc-xyz-123"
       responses:
         '200':
-          description: Returns the List of all the Pre-defined Templates.
+          description: Returns the List of all the Pre-drafted Templates.
           content:
             application/json:
               schema:
